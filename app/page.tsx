@@ -91,9 +91,9 @@ export default function Home() {
 
   const handleSelectChange = (value) => {
     setShape(value)
-    setDimensions({})
-    setResult({ area: null, perimeter: null })
-    setAnimationKey((prev) => prev + 1)
+    setDimensions({}) // Clear all dimensions
+    setResult({ area: null, perimeter: null }) // Reset results
+    setAnimationKey((prev) => prev + 1) // Reset animation
   }
 
   const handleInputChange = (name, value) => {
@@ -141,6 +141,7 @@ export default function Home() {
                 name="radius"
                 type="number"
                 step="0.01"
+                value={dimensions.radius || ""}
                 onChange={(e) => handleInputChange("radius", e.target.value)}
                 placeholder="Enter radius"
               />
@@ -157,6 +158,7 @@ export default function Home() {
                 name="length"
                 type="number"
                 step="0.01"
+                value={dimensions.length || ""}
                 onChange={(e) => handleInputChange("length", e.target.value)}
                 placeholder="Enter length"
               />
@@ -168,6 +170,7 @@ export default function Home() {
                 name="width"
                 type="number"
                 step="0.01"
+                value={dimensions.width || ""}
                 onChange={(e) => handleInputChange("width", e.target.value)}
                 placeholder="Enter width"
               />
@@ -184,6 +187,7 @@ export default function Home() {
                 name="side"
                 type="number"
                 step="0.01"
+                value={dimensions.side || ""}
                 onChange={(e) => handleInputChange("side", e.target.value)}
                 placeholder="Enter side length"
               />
@@ -200,6 +204,7 @@ export default function Home() {
                 name="base"
                 type="number"
                 step="0.01"
+                value={dimensions.base || ""}
                 onChange={(e) => handleInputChange("base", e.target.value)}
                 placeholder="Enter base"
               />
@@ -211,6 +216,7 @@ export default function Home() {
                 name="height"
                 type="number"
                 step="0.01"
+                value={dimensions.height || ""}
                 onChange={(e) => handleInputChange("height", e.target.value)}
                 placeholder="Enter height"
               />
@@ -222,6 +228,7 @@ export default function Home() {
                 name="sideA"
                 type="number"
                 step="0.01"
+                value={dimensions.sideA || ""}
                 onChange={(e) => handleInputChange("sideA", e.target.value)}
                 placeholder="Enter side A"
               />
@@ -233,6 +240,7 @@ export default function Home() {
                 name="sideB"
                 type="number"
                 step="0.01"
+                value={dimensions.sideB || ""}
                 onChange={(e) => handleInputChange("sideB", e.target.value)}
                 placeholder="Enter side B"
               />
@@ -244,6 +252,7 @@ export default function Home() {
                 name="sideC"
                 type="number"
                 step="0.01"
+                value={dimensions.sideC || ""}
                 onChange={(e) => handleInputChange("sideC", e.target.value)}
                 placeholder="Enter side C"
               />
@@ -362,3 +371,4 @@ export default function Home() {
     </div>
   )
 }
+
