@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { MoonIcon, SunIcon } from "lucide-react"
+import { MoonIcon, SunIcon, AlertCircle } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useToast } from "@/hooks/use-toast"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import ShapeAnimation from "@/components/shape-animation"
 
 // OOP CLASSES
@@ -78,8 +80,10 @@ export default function Home() {
   const [dimensions, setDimensions] = useState({})
   const [result, setResult] = useState({ area: null, perimeter: null })
   const [animationKey, setAnimationKey] = useState(0)
+  const [error, setError] = useState("")
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     setMounted(true)
@@ -87,20 +91,78 @@ export default function Home() {
 
   const handleChange = (e) => {
     setDimensions({ ...dimensions, [e.target.name]: Number.parseFloat(e.target.value) })
+    
+    if (error) setError("")
   }
 
   const handleSelectChange = (value) => {
     setShape(value)
-    setDimensions({}) // Clear all dimensions
-    setResult({ area: null, perimeter: null }) // Reset results
-    setAnimationKey((prev) => prev + 1) // Reset animation
+    setDimensions({}) 
+    setResult({ area: null, perimeter: null }) 
+    setAnimationKey((prev) => prev + 1) 
+    setError("") 
   }
 
   const handleInputChange = (name, value) => {
-    setDimensions({ ...dimensions, [name]: Number.parseFloat(value) })
+    setDimensions({ ...dimensions, [name]: value === "" ? "" : Number.parseFloat(value) })
+    
+    if (error) setError("")
+  }
+
+
+  const validateDimensions = () => {
+    
+    const requiredDimensions = {
+      Circle: ["radius"],
+      Rectangle: ["length", "width"],
+      Square: ["side"],
+      Triangle: ["base", "height", "sideA", "sideB", "sideC"],
+    }
+
+    const required = requiredDimensions[shape]
+    const missing = required.filter((dim) => !dimensions[dim] && dimensions[dim] !== 0)
+
+    if (missing.length > 0) {
+      setError(`Please enter all required dimensions: ${missing.join(", ")}`)
+      return false
+    }
+
+   
+    const negativeValues = Object.entries(dimensions).filter(([key, value]) => required.includes(key) && value < 0)
+
+    if (negativeValues.length > 0) {
+      const negativeFields = negativeValues.map(([key]) => key).join(", ")
+      setError(`Negative values are not allowed for: ${negativeFields}`)
+
+      
+      const newDimensions = { ...dimensions }
+      negativeValues.forEach(([key]) => {
+        newDimensions[key] = ""
+      })
+      setDimensions(newDimensions)
+
+      
+      toast({
+        title: "Invalid Input",
+        description: `Negative values are not allowed for shape dimensions.`,
+        variant: "destructive",
+      })
+
+      return false
+    }
+
+    return true
   }
 
   const calculate = () => {
+    
+    setError("")
+
+   
+    if (!validateDimensions()) {
+      return
+    }
+
     let shapeObj
     switch (shape) {
       case "Circle":
@@ -311,6 +373,13 @@ export default function Home() {
                 </div>
               </div>
 
+              {error && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
               {renderInputs()}
 
               <Button
@@ -371,4 +440,3 @@ export default function Home() {
     </div>
   )
 }
-
