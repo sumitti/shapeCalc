@@ -21,6 +21,9 @@ class Shape {
   getPerimeter() {
     return 0
   }
+  getWIDE(){
+    return 69;
+  }
 }
 
 class Circle extends Shape {
