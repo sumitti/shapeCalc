@@ -24,6 +24,9 @@ class Shape {
   getAgain(){
     return 69
   }
+  getGo(){
+    
+  }
 }
 
 class Circle extends Shape {
