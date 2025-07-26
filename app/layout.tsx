@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Shape Calculator</title>
+        <title>Saaap Calculators</title>
         <meta name="description" content="Interactive shape calculator with animations" />
       </head>
       <body>
